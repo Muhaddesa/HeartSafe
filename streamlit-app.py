@@ -30,26 +30,25 @@ with col2:
     sex = st.radio("⚧️ Sex", [0, 1], format_func=lambda x: "Female" if x == 0 else "Male", horizontal=True)
     cp = st.selectbox("💓 Chest Pain Type", [0, 1, 2, 3], format_func=lambda x: ["Typical Angina", "Atypical Angina", "Non-Anginal Pain", "Asymptomatic"][x])
     thalach = st.number_input(
-    "❤️ Enter your Maximum Heart Rate Achieved (thalach)",
-    min_value=50,
-    max_value=250,
-    value=94,
-    step=1,
-    help="This is the highest heart rate you achieved during a stress test."
-)
-
+        "❤️ Enter your Maximum Heart Rate Achieved (thalach)",
+        min_value=50,
+        max_value=250,
+        value=94,
+        step=1,
+        help="This is the highest heart rate you achieved during a stress test."
+    )
     exang = st.radio("🏃 Exercise-Induced Angina?", [0, 1], format_func=lambda x: "No" if x == 0 else "Yes", horizontal=True)
 
 with col3:
     restecg = st.selectbox("📈 Resting ECG Results", [0, 1, 2], format_func=lambda x: ["Normal", "ST-T wave abnormality", "Left Ventricular Hypertrophy"][x])
-    #oldpeak = st.slider("📉 ST Depression (oldpeak)", 0.0, 6.0, 1.0, 0.1)
-    oldpeak = st.number_input("📉 Enter ST Depression (oldpeak): ", 
-    min_value=0.0,
-    max_value=6.0,
-    value=1.0,
-    step=0.1,
-    format="%.1f",
-    help="ST depression induced by exercise relative to rest. Higher values may indicate higher risk."
+    oldpeak = st.number_input(
+        "📉 Enter ST Depression (oldpeak):",
+        min_value=0.0,
+        max_value=6.0,
+        value=1.0,
+        step=0.1,
+        format="%.1f",
+        help="ST depression induced by exercise relative to rest. Higher values may indicate higher risk."
     )
     slope = st.selectbox("⛰️ Slope of ST Segment", [0, 1, 2], format_func=lambda x: ["Upsloping", "Flat", "Downsloping"][x])
     ca = st.selectbox("🩺 # of Major Vessels Colored", [0, 1, 2, 3, 4])
@@ -57,17 +56,18 @@ with col3:
 
 st.markdown("---")
 
-#prediction
+# Prediction
 if st.button("🔍 Predict", use_container_width=True):
     input_features = np.array([[age, sex, cp, trestbps, chol, fbs, restecg,
                                 thalach, exang, oldpeak, slope, ca, thal]])
     input_scaled = scaler.transform(input_features)
 
     prediction = voting_model.predict(input_scaled)
+    prob = voting_model.predict_proba(input_scaled)[0][1]  # Probability of Heart Disease
 
     st.markdown("## 🧾 Results", unsafe_allow_html=True)
 
-    # Centering using HTML
+    # Centered Result Text
     if prediction[0] == 1:
         result_text = "<h2 style='text-align: center; color: red;'>⚠️ Heart Disease Detected</h2>"
     else:
@@ -75,7 +75,33 @@ if st.button("🔍 Predict", use_container_width=True):
 
     st.markdown(result_text, unsafe_allow_html=True)
 
+    if prediction[0] == 0:
+        st.balloons()  # 🎈 Animation when no disease is detected
 
+    # Doctor Advice (Always shown)
+    st.markdown("### 🩺 Doctor's Preventive Care Advice", unsafe_allow_html=True)
+
+    if prediction[0] == 1:
+        if prob < 0.4:
+            st.markdown("""
+            - 🥗 Focus on a healthy diet rich in vegetables and fruits.
+            """)
+        elif prob < 0.7:
+            st.markdown("""
+            - 🚶 Exercise regularly (at least 150 min per week).
+            - 🩺 Monitor blood pressure and cholesterol levels.
+            """)
+        else:
+            st.markdown("""
+            - 🚨 Immediate doctor consultation recommended.
+            - 💊 Strictly follow prescribed medications.
+            - 🛌 Reduce workload and prioritize heart health.
+            """)
+    else:
+        st.markdown("""
+        - 🥗 Maintain your current healthy lifestyle!
+        - 🚭 Avoid smoking and limit processed foods.
+        """)
 
 # Feature explanation
 with st.expander("🧠 Learn More About Each Feature"):
