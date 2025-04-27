@@ -18,7 +18,8 @@ It provides a simple and interactive interface for users to input medical parame
 - numpy
 
 ## Model
-- Trained using a Random Forest Classifier
+- Trained different models such as Random Forest Classifier, KNN, SVM while all had significant performance, I wanted a more robust model;
+  so I used a Voting Classifier type of soft voting.
 - Input features include:  
   `age`, `sex`, `chest pain type`, `resting blood pressure`, `serum cholesterol`, `fasting blood sugar`, `resting ECG`, `max heart rate`, `exercise-induced angina`, `ST depression`, `slope`, `major vessels`, and `thalassemia`
 
