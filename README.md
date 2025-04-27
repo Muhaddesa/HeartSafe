@@ -24,7 +24,18 @@ It provides a simple and interactive interface for users to input medical parame
   `age`, `sex`, `chest pain type`, `resting blood pressure`, `serum cholesterol`, `fasting blood sugar`, `resting ECG`, `max heart rate`, `exercise-induced angina`, `ST depression`, `slope`, `major vessels`, and `thalassemia`
 
 ## How to Run Locally
+## How to Run Locally
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/heart-disease-predictor.git
-   cd heart-disease-predictor
+   git clone https://github.com/Muhaddesa/HeartSafe.git
+   cd HeartSafe
+   Install the required Python packages:
+
+2. Install the required Python packages:
+   ```bash
+   pip install -r requirements.txt
+3. Run the Streamlit App:
+   ```bash
+   streamlit run streamlit-app.py
+
+4. Open the link provided in the terminal (usually http://localhost:8501) to use the app in your browser.
